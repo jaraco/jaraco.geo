@@ -5,6 +5,7 @@ from ctypes import *
 _libraries = {}
 dllname = ['geotrans2-32.dll', 'geotrans2-64.dll']['AMD64' in sys.version]
 dllname = os.path.join(os.path.dirname(__file__), dllname)
+dllname = r'c:\users\jaraco\projects\geotrans2.4.2\geotrans2\win\geotrans2.dll'
 _libraries['geotrans2.dll'] = CDLL(dllname)
 STRING = c_char_p
 
