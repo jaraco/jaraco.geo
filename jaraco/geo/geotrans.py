@@ -21,5 +21,5 @@ def initialize_engine():
 
 def get_datum_index(datum_code):
 	index = ctypes.c_long()
-	handle_status(geotrans2_lib.Get_Datum_Index(datum_code, ctypes.byref(index)))
+	handle_status(geotrans2_lib.Get_Datum_Index(datum_code, index))
 	return index.value
