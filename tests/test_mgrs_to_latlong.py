@@ -4,6 +4,7 @@
 from ctypes import *
 from jaraco.geo.geotrans import *
 from jaraco.geo.geotrans2_lib import *
+from jaraco.geo import DMS
 
 import math
 PI = math.pi
@@ -34,5 +35,5 @@ handle_status(Convert(Interactive))
 handle_status(Get_Geodetic_Coordinates (Interactive, Output, output_coords))
 #handle_status(Get_Conversion_Errors (Interactive, ce90, le90, se90)) 
 
-print "latitude:", output_coords.latitude
-print "longitude:", output_coords.longitude
+print "latitude:", unicode(DMS(output_coords.latitude*180/PI))
+print "longitude:", unicode(DMS(output_coords.longitude*180/PI))
