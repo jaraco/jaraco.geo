@@ -17,7 +17,13 @@ def split_sign(value):
 
 def sign_string(sign):
 	return ['', '-'][sign < 0]
-	
+
+sample1 = u''' 38\u00b055'14.46"N'''
+assert sample1[3] == u'\u00b0'
+sample2 = ''' 38°55'14.46"N'''
+sample3 = sample2.decode('utf-8')
+assert sample3 == sample1
+
 class DMS(object):
 	"""
 	DMS - Degrees Minutes Seconds
@@ -38,8 +44,19 @@ class DMS(object):
 	>>> dms[1] == 37
 	True
 	
+	Test a location taken from Google Earth
+	>>> dms = DMS(u''' 38\u00b055'14.46"N''')
+	
+	If you're using a degree symbol, you need to be sure it's
+	properly encoded.  This will depend on what your file or
+	shell encoding are.
+	>>> dms = DMS(''' 38°55'14.46"N'''.decode('utf-8'))
+	
+	For example, if you're using this from an MS-DOS shell, you need
+	to decode using Code Page 437. i.e.
+	>>> dms = DMS(''' 38°55'14.46"N'''.decode('cp437')) # doctest: +SKIP
 	"""
-	dmsPatterns = [
+	pattern_definitions = [
 		# This pattern matches the DMS string that assumes little formatting.
 		#  The numbers are bunched together, and it is assumed that the minutes
 		#  and seconds are two digits each.
@@ -54,7 +71,7 @@ class DMS(object):
 		""",
 		# This pattern attempts to match all other possible specifications of
 		#  DMS entry.
-		"""
+		u"""
 		(-)?			# optional negative sign
 		(?P<deg>\d+		# number of degrees (saved as 'deg')
 			(\.\d+)?	# optional fractional number of degrees (not saved separately)
@@ -86,6 +103,10 @@ class DMS(object):
 		$				# end of string
 		"""
 		]
+	patterns = [
+		re.compile(defn, re.IGNORECASE | re.VERBOSE)
+		for defn in pattern_definitions]
+		
 	def __init__(self, DMSString = None):
 		self.SetDMS(DMSString)
 
@@ -95,7 +116,7 @@ class DMS(object):
 	def __unicode__(self):
 		value, sign = self.DMS
 		sign = sign_string(sign)
-		return u'''%s%d° %d' %d"''' % ((sign,)+value)
+		return u'''%s%d° %d' %f"''' % ((sign,)+value)
 
 	@staticmethod
 	def get_dms_from_dd(dd, precision=2):
@@ -107,11 +128,15 @@ class DMS(object):
 		sec = (fracMin - min) * 60
 		return (deg, min, sec), sign
 
-	def SetDMS(self, DMSString):
-		self.DMSString = str(DMSString).strip()
-		matches = filter(None, map(self._doPattern, self.dmsPatterns))
+	def SetDMS(self, dms_string):
+		self.DMSString = dms_string.strip()
+		matches = [
+			pattern.match(self.DMSString)
+			for pattern in self.patterns
+			]
+		matches = filter(None, matches)
 		if len(matches) == 0:
-			raise ValueError, 'String %s did not match any DMS pattern' % self.DMSString
+			raise ValueError(u'String %s did not match any DMS pattern' % self.DMSString)
 		bestMatch = matches[0]
 		self.dd = self._getDDFromMatch(bestMatch)
 		del self.DMSString
@@ -120,10 +145,6 @@ class DMS(object):
 		return self.get_dms_from_dd(self.dd)
 
 	DMS = property(GetDMS, SetDMS)
-	
-	def _doPattern(self, pattern):
-		expression = re.compile(pattern, re.IGNORECASE | re.VERBOSE)
-		return expression.match(self.DMSString)
 	
 	def _getDDFromMatch(self, dmsMatch):
 		# get the negative sign
