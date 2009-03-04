@@ -1,0 +1,27 @@
+jaraco.geo
+==========
+
+.. contents::
+
+Status and License
+------------------
+
+``jaraco.geo`` is a geographic support library.
+
+``jaraco.geo`` is written by Jason R. Coombs.  It is licensed under an
+`MIT-style permissive license
+<https://svn.jaraco.com/jaraco/python/jaraco.geo/docs/license.txt>`_.
+
+You can install it with ``easy_install jaraco.geo``, or from the
+`subversion repository
+<https://svn.jaraco.com/jaraco/python/jaraco.geo#egg=jaraco.geo-dev>`_ with
+``easy_install jaraco.geo==dev``.
+
+Changes
+-------
+
+1.0
+~~~
+
+* Initial release
+* Implements NGA geotrans2
