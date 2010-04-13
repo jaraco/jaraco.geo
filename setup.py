@@ -16,7 +16,7 @@ name = 'jaraco.geo'
 
 setup (
 	name = name,
-	version = '1.0',
+	version = '1.1',
 	description = 'Geographic coordinates package',
 	long_description = open('docs/index.txt').read(),
 	author = 'Jason R. Coombs',
