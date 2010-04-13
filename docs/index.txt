@@ -25,7 +25,7 @@ values in degrees, minutes, and seconds. See the jaraco.geo module for
 details and documentation.
 
 ``jaraco.geo`` also implements geotrans2 by the `NGA
-<http://www.nga.gov>`_. See the tests directory in the subversion
+<http://www.nga.mil>`_. See the tests directory in the subversion
 repository for sample usage.
 
 Changes
