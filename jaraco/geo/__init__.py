@@ -3,7 +3,7 @@
 
 import re
 import operator
-from jaraco.util.dictlib import DictMap
+from jaraco.util.dictlib import dict_map
 
 def split_sign(value):
 	"""
@@ -55,6 +55,10 @@ class DMS(object):
 	For example, if you're using this from an MS-DOS shell, you need
 	to decode using Code Page 437. i.e.
 	>>> dms = DMS(''' 38°55'14.46"N'''.decode('cp437')) # doctest: +SKIP
+	
+	DMS can also be instantiated from a float.
+	>>> dms = DMS(35.4)
+	
 	"""
 	pattern_definitions = [
 		# This pattern matches the DMS string that assumes little formatting.
@@ -107,8 +111,9 @@ class DMS(object):
 		re.compile(defn, re.IGNORECASE | re.VERBOSE)
 		for defn in pattern_definitions]
 		
-	def __init__(self, DMSString = None):
-		self.SetDMS(DMSString)
+	def __init__(self, dms_string=None):
+		if dms_string is not None:
+			self.SetDMS(unicode(dms_string))
 
 	def __float__(self):
 		return self.dd
@@ -156,7 +161,7 @@ class DMS(object):
 		if d['min'] is None: d['min'] = 0
 		if d['sec'] is None: d['sec'] = 0
 		# get the DMS and convert each to float
-		d = DictMap(float, d)
+		d = dict_map(float, d)
 		# convert the result to decimal format
 		result = d['deg'] + d['min'] / 60 + d['sec'] / 3600
 		if isNegative ^ isSouthOrWest: result = -result
