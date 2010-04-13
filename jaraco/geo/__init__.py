@@ -4,6 +4,7 @@
 import re
 import operator
 from jaraco.util.dictlib import dict_map
+from itertools import ifilter
 
 def split_sign(value):
 	"""
@@ -18,11 +19,20 @@ def split_sign(value):
 def sign_string(sign):
 	return ['', '-'][sign < 0]
 
-sample1 = u''' 38\u00b055'14.46"N'''
-assert sample1[3] == u'\u00b0'
-sample2 = ''' 38°55'14.46"N'''
-sample3 = sample2.decode('utf-8')
-assert sample3 == sample1
+def test_encoding():
+	"""
+	In some of the early implementations, I ran into encoding problems
+	so I include this as a sanity check of encoding various characters
+	used in DMS objects.
+	
+	>>> test_encoding()
+	"""
+	sample1 = u''' 38\u00b055'14.46"N'''
+	assert sample1[3] == u'\u00b0'
+	sample2 = ''' 38°55'14.46"N'''
+	sample3 = sample2.decode('utf-8')
+	assert sample3 == sample1
+
 
 class DMS(object):
 	"""
@@ -110,10 +120,10 @@ class DMS(object):
 	patterns = [
 		re.compile(defn, re.IGNORECASE | re.VERBOSE)
 		for defn in pattern_definitions]
-		
+
 	def __init__(self, dms_string=None):
 		if dms_string is not None:
-			self.SetDMS(unicode(dms_string))
+			self.DMS = unicode(dms_string).strip()
 
 	def __float__(self):
 		return self.dd
@@ -121,42 +131,66 @@ class DMS(object):
 	def __unicode__(self):
 		value, sign = self.DMS
 		sign = sign_string(sign)
-		return u'''%s%d° %d' %f"''' % ((sign,)+value)
+		return u'''{0:s}{1:d}° {2:d}' {3:f}"'''.format(sign, *value)
 
 	@staticmethod
-	def get_dms_from_dd(dd, precision=2):
+	def dd_to_dms(dd):
+		"""
+		Convert from degrees in decimal to degrees, minutes, seconds.
+		
+		>>> DMS.dd_to_dms(35.2)
+		((35, 12, 1.0231815394945443e-11), 1)
+		
+		>>> DMS.dd_to_dms(-273.9)
+		((273, 54, -8.1854523159563541e-11), -1)
+		
+		>>> DMS.dd_to_dms(-273.90236461982337)
+		((273, 54, 8.5126313640421358), -1)
+		"""
 		sign, dd = split_sign(dd)
-		int_round = lambda v: int(round(v, precision))
+		int_round = lambda v: int(round(v, 2))
 		deg = int_round(dd)
 		fracMin = (dd - deg) * 60
 		min = int_round(fracMin)
 		sec = (fracMin - min) * 60
 		return (deg, min, sec), sign
 
-	def SetDMS(self, dms_string):
-		self.DMSString = dms_string.strip()
-		matches = [
-			pattern.match(self.DMSString)
-			for pattern in self.patterns
-			]
-		matches = filter(None, matches)
-		if len(matches) == 0:
-			raise ValueError(u'String %s did not match any DMS pattern' % self.DMSString)
-		bestMatch = matches[0]
-		self.dd = self._getDDFromMatch(bestMatch)
-		del self.DMSString
+	@staticmethod
+	def dms_to_dd(dms):
+		"""
+		Convert DMS string to DD
+		
+		>>> DMS.dms_to_dd('334259')
+		33.716388888888893
+		>>> DMS.dms_to_dd('35deg 42min 20sec E')
+		35.705555555555556
+		"""
+		matches = [pattern.match(dms) for pattern in DMS.patterns]
+		matches = ifilter(None, matches)
+		try:
+			best_match = next(matches)
+		except StopIteration:
+			raise ValueError(u'String %s did not match any DMS pattern' % dms)
+		return DMS._get_dd_from_match(best_match)
 
-	def GetDMS(self):
-		return self.get_dms_from_dd(self.dd)
+	def set_DMS(self, dms_string):
+		self.dd = self.dms_to_dd(dms_string)
 
-	DMS = property(GetDMS, SetDMS)
-	
-	def _getDDFromMatch(self, dmsMatch):
+	def get_DMS(self):
+		return self.dd_to_dms(self.dd)
+
+	DMS = property(get_DMS, set_DMS)
+
+	@staticmethod
+	def _get_dd_from_match(dms_match):
 		# get the negative sign
-		isNegative = operator.truth(dmsMatch.group(1))
+		is_negative = operator.truth(dms_match.group(1))
 		# get SW direction
-		isSouthOrWest = operator.truth(dmsMatch.groups()[-1]) and dmsMatch.groups()[-1].lower() in ('s', 'w')
-		d = dmsMatch.groupdict()
+		is_south_or_west = (
+			operator.truth(dms_match.groups()[-1]) and
+			dms_match.groups()[-1].lower() in ('s', 'w')
+			)
+		d = dms_match.groupdict()
 		# set min & sec to zero if they weren't matched
 		if d['min'] is None: d['min'] = 0
 		if d['sec'] is None: d['sec'] = 0
@@ -164,8 +198,14 @@ class DMS(object):
 		d = dict_map(float, d)
 		# convert the result to decimal format
 		result = d['deg'] + d['min'] / 60 + d['sec'] / 3600
-		if isNegative ^ isSouthOrWest: result = -result
+		if is_negative ^ is_south_or_west: result = -result
 		# validate the result
-		if not (0 <= d['deg'] < 360 and 0 <= d['min'] < 60 and 0 <= d['sec'] < 60 and result >= -180):
-			raise ValueError, 'DMS not given in valid range (%(deg)f°%(min)f\'%(sec)f").' % d
+		if not (
+			0 <= d['deg'] < 360 and
+			0 <= d['min'] < 60 and
+			0 <= d['sec'] < 60 and
+			result >= -180):
+				fmt = """DMS not given in valid range ({deg:f}°{min:f}'{sec:f}")."""
+				msg = fmt.format(**d)
+				raise ValueError(msg) 
 		return result
