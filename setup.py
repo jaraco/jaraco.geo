@@ -2,13 +2,10 @@
 
 """ Setup script for building jaraco-util distribution
 
-Copyright © 2004-2009 Jason R. Coombs
+Copyright © 2004-2010 Jason R. Coombs
 """
 
-from ez_setup import use_setuptools
-use_setuptools()
 from setuptools import setup, find_packages
-from jaraco.util.package import read_long_description
 
 __author__ = 'Jason R. Coombs <jaraco@jaraco.com>'
 __version__ = '$Rev$'[6:-2]
@@ -21,13 +18,15 @@ setup (
 	name = name,
 	version = '1.0',
 	description = 'Geographic coordinates package',
-	long_description = read_long_description(__file__),
+	long_description = open('docs/index.txt').read(),
 	author = 'Jason R. Coombs',
 	author_email = 'jaraco@jaraco.com',
 	url = 'http://pypi.python.org/pypi/'+name,
-	packages = find_packages(exclude=['ez_setup', 'tests', 'examples']),
+	packages = find_packages(),
+	include_package_data=True,
 	namespace_packages = ['jaraco',],
 	license = 'MIT',
+	zip_safe=False,
 	classifiers = [
 		"Development Status :: 4 - Beta",
 		"Intended Audience :: Developers",
