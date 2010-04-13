@@ -1,7 +1,7 @@
-from jaraco.geo.geotrans import *
-from traceback import print_exc
-try:
+from jaraco.geo.geotrans import initialize_engine, get_datum_index
+
+def test_get_index():
 	initialize_engine()
 	print get_datum_index('WGE')
-except Exception, e:
-	print_exc()
+
+if __name__ == '__main__': test_get_index()
