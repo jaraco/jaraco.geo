@@ -2,7 +2,6 @@
 #!python
 
 import re
-import operator
 from jaraco.util.dictlib import dict_map
 from itertools import ifilter
 
@@ -184,10 +183,10 @@ class DMS(object):
 	@staticmethod
 	def _get_dd_from_match(dms_match):
 		# get the negative sign
-		is_negative = operator.truth(dms_match.group(1))
+		is_negative = bool(dms_match.group(1))
 		# get SW direction
 		is_south_or_west = (
-			operator.truth(dms_match.groups()[-1]) and
+			bool(dms_match.groups()[-1]) and
 			dms_match.groups()[-1].lower() in ('s', 'w')
 			)
 		d = dms_match.groupdict()
