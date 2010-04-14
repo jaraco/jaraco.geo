@@ -17,6 +17,16 @@ You can install it with ``easy_install jaraco.geo``, or from the
 <https://svn.jaraco.com/jaraco/python/jaraco.geo#egg=jaraco.geo-dev>`_ with
 ``easy_install jaraco.geo==dev``.
 
+Requirements
+------------
+
+As Python support for namespace packages is still in development,
+setuptools or distribute is required.
+
+Also, the current geotrans2 dynamic libraries are currently built only
+for Windows, so support for other platforms is currently not present.
+However, the DMS class should be usable in a pure-python environment.
+
 Contents
 --------
 
@@ -30,6 +40,11 @@ repository for sample usage.
 
 Changes
 -------
+
+1.1
+~~~
+
+* Added 2to3 support - now easy_installs under Python 2 and Python 3.
 
 1.0
 ~~~

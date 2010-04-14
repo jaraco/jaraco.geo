@@ -5,6 +5,11 @@
 Copyright © 2004-2010 Jason R. Coombs
 """
 
+try:
+	from distutils.command.build_py import build_py_2to3 as build_py
+except ImportError:
+	from distutils.command.build_py import build_py
+
 from setuptools import setup, find_packages
 
 __author__ = 'Jason R. Coombs <jaraco@jaraco.com>'
@@ -47,4 +52,5 @@ setup (
 		'nose>=0.10',
 	],
 	test_suite = "nose.collector",
+	cmdclass=dict(build_py=build_py),
 )
