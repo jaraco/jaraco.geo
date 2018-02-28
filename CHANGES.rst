@@ -1,3 +1,8 @@
+v1.3.1
+======
+
+Restored content in the README and corrected changelog.
+
 v1.3.0
 ======
 
