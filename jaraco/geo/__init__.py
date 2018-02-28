@@ -1,9 +1,10 @@
 
 import re
-from jaraco.util.dictlib import dict_map
-from itertools import ifilter
 
 import six
+from six.moves import filter
+
+from jaraco.collections import dict_map
 
 
 def split_sign(value):
@@ -170,7 +171,7 @@ class DMS(object):
 		35.705555555555556
 		"""
 		matches = [pattern.match(dms) for pattern in DMS.patterns]
-		matches = ifilter(None, matches)
+		matches = filter(None, matches)
 		try:
 			best_match = next(matches)
 		except StopIteration:

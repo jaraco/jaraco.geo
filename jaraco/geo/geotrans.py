@@ -1,6 +1,6 @@
 import ctypes
 
-import geotrans2_lib
+from . import geotrans2_lib
 
 engine_errors = [key for key in dir(geotrans2_lib) if key.startswith('ENGINE')]
 
