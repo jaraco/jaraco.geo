@@ -1,10 +1,10 @@
-.. image:: https://img.shields.io/pypi/v/skeleton.svg
-   :target: https://pypi.org/project/skeleton
+.. image:: https://img.shields.io/pypi/v/jaraco.geo.svg
+   :target: https://pypi.org/project/jaraco.geo
 
-.. image:: https://img.shields.io/pypi/pyversions/skeleton.svg
+.. image:: https://img.shields.io/pypi/pyversions/jaraco.geo.svg
 
-.. image:: https://img.shields.io/travis/jaraco/skeleton/master.svg
-   :target: https://travis-ci.org/jaraco/skeleton
+.. image:: https://img.shields.io/travis/jaraco/jaraco.geo/master.svg
+   :target: https://travis-ci.org/jaraco/jaraco.geo
 
-.. image:: https://readthedocs.org/projects/skeleton/badge/?version=latest
-   :target: https://skeleton.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/jaracogeo/badge/?version=latest
+   :target: https://jaracogeo.readthedocs.io/en/latest/?badge=latest
