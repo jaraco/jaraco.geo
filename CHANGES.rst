@@ -11,4 +11,4 @@ Added 2to3 build support.
 v1.0.0
 ======
 
-Initial release.
+Initial release. Implements NGA geotrans2.
