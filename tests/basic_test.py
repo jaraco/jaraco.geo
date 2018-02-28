@@ -1,4 +1,9 @@
+import pytest
+
 from jaraco.geo.geotrans import initialize_engine, get_datum_index
+
+
+pytestmark = pytest.mark.xfail("sys.version_info > (3,)")
 
 
 def test_get_index():

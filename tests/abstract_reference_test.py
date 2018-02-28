@@ -75,6 +75,13 @@ from jaraco.geo.geotrans2_lib import (
 )
 
 import math
+
+import pytest
+
+
+pytestmark = pytest.mark.xfail("sys.version_info > (3,)")
+
+
 PI = math.pi
 
 
