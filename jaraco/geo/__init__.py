@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 import re
 
 import six
@@ -31,11 +33,10 @@ def test_encoding():
 
 	>>> test_encoding()
 	"""
-	sample1 = u''' 38\u00b055'14.46"N'''
-	assert sample1[3] == u'\u00b0'
+	sample1 = ''' 38\u00b055'14.46"N'''
+	assert sample1[3] == '\u00b0'
 	sample2 = ''' 38°55'14.46"N'''
-	sample3 = sample2.decode('utf-8')
-	assert sample3 == sample1
+	assert sample2 == sample1
 
 
 class DMS(object):
@@ -59,16 +60,12 @@ class DMS(object):
 	True
 
 	Test a location taken from Google Earth
-	>>> dms = DMS(u''' 38\u00b055'14.46"N''')
+	>>> dms = DMS(''' 38\u00b055'14.46"N''')
 
 	If you're using a degree symbol, you need to be sure it's
 	properly encoded.  This will depend on what your file or
 	shell encoding are.
-	>>> dms = DMS(''' 38°55'14.46"N'''.decode('utf-8'))
-
-	For example, if you're using this from an MS-DOS shell, you need
-	to decode using Code Page 437. i.e.
-	>>> dms = DMS(''' 38°55'14.46"N'''.decode('cp437')) # doctest: +SKIP
+	>>> dms = DMS(''' 38°55'14.46"N''')
 
 	DMS can also be instantiated from a float.
 	>>> dms = DMS(35.4)
