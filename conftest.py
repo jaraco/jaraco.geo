@@ -5,7 +5,7 @@ collect_ignore = [
 	'jaraco/geo/geotrans2_lib.py',
 ]
 
-if platform.system != 'Windows':
+if platform.system() != 'Windows':
 	collect_ignore.extend([
 		'tests',
 	])
