@@ -33,7 +33,7 @@ params = dict(
 	),
 	python_requires='>=2.7',
 	install_requires=[
-        'jaraco.util',
+		'jaraco.util',
 	],
 	extras_require={
 		'testing': [

@@ -1,8 +1,5 @@
-#!/usr/bin/env python
-
-# $Id$
-
 import os
+
 
 def setup_environment():
 	"""
@@ -14,5 +11,6 @@ def setup_environment():
 	assert os.path.exists(os.path.join(data_path, '7_param.dat'))
 	key = 'GEOTRANS_DATA'
 	os.environ[key] = data_path
+
 
 setup_environment()
