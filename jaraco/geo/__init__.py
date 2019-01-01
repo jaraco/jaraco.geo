@@ -75,7 +75,7 @@ class DMS(object):
 		# This pattern matches the DMS string that assumes little formatting.
 		#  The numbers are bunched together, and it is assumed that the minutes
 		#  and seconds are two digits each.
-		"""
+		r"""
 		(-)?			# optional negative sign
 		(?P<deg>\d+)	# number of degrees (saved as 'deg')
 		(?P<min>\d{2})	# number of minutes (saved as 'min')
@@ -86,7 +86,7 @@ class DMS(object):
 		""",
 		# This pattern attempts to match all other possible specifications of
 		#  DMS entry.
-		u"""
+		r"""
 		(-)?			# optional negative sign
 		(?P<deg>\d+		# number of degrees (saved as 'deg')
 			(\.\d+)?	# optional fractional number of degrees (not saved separately)
@@ -132,7 +132,7 @@ class DMS(object):
 	def __unicode__(self):
 		value, sign = self.DMS
 		sign = sign_string(sign)
-		return u'''{0:s}{1:d}° {2:d}' {3:f}"'''.format(sign, *value)
+		return '''{0:s}{1:d}° {2:d}' {3:f}"'''.format(sign, *value)
 
 	@staticmethod
 	def dd_to_dms(dd):
@@ -173,7 +173,7 @@ class DMS(object):
 		try:
 			best_match = next(matches)
 		except StopIteration:
-			raise ValueError(u'String %s did not match any DMS pattern' % dms)
+			raise ValueError('String %s did not match any DMS pattern' % dms)
 		return DMS._get_dd_from_match(best_match)
 
 	def set_DMS(self, dms_string):
