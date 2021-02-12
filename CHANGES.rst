@@ -1,3 +1,10 @@
+v2.1.0
+======
+
+Require Python 3.6 even though the code only works on 2.7.
+
+Last release.
+
 v2.0.0
 ======
 
