@@ -7,9 +7,9 @@ pytestmark = pytest.mark.xfail("sys.version_info > (3,)")
 
 
 def test_get_index():
-	initialize_engine()
-	print(get_datum_index('WGE'))
+    initialize_engine()
+    print(get_datum_index('WGE'))
 
 
 if __name__ == '__main__':
-	test_get_index()
+    test_get_index()
