@@ -4,9 +4,6 @@ from __future__ import unicode_literals
 
 import re
 
-import six
-from six.moves import filter
-
 from jaraco.collections import dict_map
 
 
@@ -125,7 +122,7 @@ class DMS(object):
 
     def __init__(self, dms_string=None):
         if dms_string is not None:
-            self.DMS = six.text_type(dms_string).strip()
+            self.DMS = str(dms_string).strip()
 
     def __float__(self):
         return self.dd

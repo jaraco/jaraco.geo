@@ -25,8 +25,6 @@ from jaraco.geo.geotrans2_lib import (
 )
 from jaraco.geo import DMS
 
-import six
-
 import pytest
 
 
@@ -63,8 +61,8 @@ def test_convert():
     handle_status(Get_Geodetic_Coordinates(Interactive, Output, output_coords))
     # handle_status(Get_Conversion_Errors(Interactive, ce90, le90, se90))
 
-    print("latitude:", six.text_type(DMS(output_coords.latitude * 180 / PI)))
-    print("longitude:", six.text_type(DMS(output_coords.longitude * 180 / PI)))
+    print("latitude:", str(DMS(output_coords.latitude * 180 / PI)))
+    print("longitude:", str(DMS(output_coords.longitude * 180 / PI)))
 
 
 if __name__ == '__main__':
