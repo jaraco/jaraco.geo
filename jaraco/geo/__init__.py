@@ -105,10 +105,12 @@ class DMS(object):
             (?:         # begin optional seconds
                 \s*             # optional whitespace
                 (?P<sec>\d+     # number of seconds
-                    (?:\.\d+)?  # optional fractional number of seconds (not saved separately)
+                    # optional fractional number of seconds (not saved separately)
+                    (?:\.\d+)?
                 )               # (all saved as 'sec')
                 \s*             # optional whitespace
-                (?:("|sec))?    # optionally a minutes symbol or the word 'sec' (not saved)
+                # optionally a minutes symbol or the word 'sec' (not saved)
+                (?:("|sec))?
             )?              # end optional seconds
         )?              # end optional minutes and seconds
         \s*             # optional whitespace
