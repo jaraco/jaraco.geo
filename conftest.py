@@ -6,8 +6,6 @@ collect_ignore = [
 ]
 
 if platform.system() != 'Windows':
-    collect_ignore.extend(
-        [
-            'tests',
-        ]
-    )
+    collect_ignore.extend([
+        'tests',
+    ])
